@@ -9,6 +9,7 @@
     "@monaco-editor/react": "^4.4.5",
     "@mui/icons-material": "^5.8.0",
     "@mui/material": "^5.8.1",
+    "@mui/x-data-grid": "^5.17.12",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^14.2.0",
@@ -53,5 +54,8 @@
     "@types/query-string": "^6.3.0",
     "cross-env": "^7.0.3",
     "prettier": "2.6.2"
+  },
+  "volta": {
+    "node": "16.4.0"
   }
 }
