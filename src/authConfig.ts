@@ -7,6 +7,7 @@ export const PROVIDERS = {
 
 const authConfig: AuthenticationConfig = {
   providers: {},
+  serviceUrl: 'https://nocodb.iad2.cloud',
 };
 
 authConfig.providers[PROVIDERS.KEYCLOAK] = {

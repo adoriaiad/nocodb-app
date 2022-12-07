@@ -10,14 +10,14 @@
   "typescript.referencesCodeLens.enabled": true,
   "git.ignoreLimitWarning": true,
   "workbench.colorCustomizations": {
-    "activityBar.activeBackground": "#333841",
+    "activityBar.activeBackground": "#77428f",
     "activityBar.activeBorder": "#f6f7f8",
-    "activityBar.background": "#282C34",
+    "activityBar.background": "#4e2262",
     "activityBar.foreground": "#f8b133",
     "activityBar.inactiveForeground": "#f6f7f8",
-    "activityBarBadge.background": "#e1e42d",
+    "activityBarBadge.background": "#f8b133",
     "activityBarBadge.foreground": "#000000",
-    "statusBar.background": "#f8b133",
-    "statusBar.foreground": "#282C34"
+    "statusBar.background": "#4e2262",
+    "statusBar.foreground": "#f6f7f8"
   }
 }

@@ -59,7 +59,7 @@ const NavBar: React.FC = () => {
               <Button
                 onClick={() => navigate(isAuthenticated() ? '/protected' : '/')}
               >
-                <Typography>👻 Oauth2 Playground</Typography>
+                <Typography>📝 IAD CRM</Typography>
               </Button>
             </Box>
             <IconButton

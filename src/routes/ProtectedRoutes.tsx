@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import { RouteObject, useRoutes } from 'react-router';
 import Loadable from '../core/Loadable';
 import ProtectedLayout from '../layouts/ProtectedLayout';
-import TeamList from '../pages/TeamList';
+import ClientiList from '../pages/ClientiList';
 
 const UserInfo = Loadable(lazy(() => import('../pages/UserInfo')));
 const Credentials = Loadable(lazy(() => import('../pages/Credentials')));
@@ -16,7 +16,7 @@ const routes: RouteObject = {
   children: [
     {
       path: '/',
-      element: <TeamList />,
+      element: <ClientiList />,
     },
     {
       path: '/users',
