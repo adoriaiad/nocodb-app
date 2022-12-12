@@ -3,9 +3,11 @@ import { IList, IPageInfo } from '../models/clienti';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getCustomers } from '../services/nocodb.service';
 import { nanoid } from 'nanoid';
+import { isEmptyArray } from 'formik';
 
 function ClientiList() {
   const [rows, setRows] = useState<IList[]>([]);
+  const [columns, setColumns] = useState<GridColDef[]>([]);
   const [pageInfo, setPageInfo] = useState<IPageInfo>({
     isFirstPage: true,
     isLastPage: false,
@@ -14,19 +16,25 @@ function ClientiList() {
     totalRows: 0,
   });
 
-  const columns: GridColDef[] = Object.keys(rows).map(key => {
-    return { field: key, headerName: key, width: 110 };
-  });
-
   useEffect(() => {
     loadCustomers();
   }, []);
+
+  useEffect(() => {
+    if (!isEmptyArray(rows)) {
+      setColumns(
+        Object.keys(rows[0]).map((key, index) => {
+          return { field: key, headerName: key, width: 110 };
+        })
+      );
+    }
+  }, [rows]);
 
   function loadCustomers() {
     getCustomers()
       .then(res => {
         setRows(res.list);
-        setPageInfo(res.PageInfo);
+        setPageInfo(res.pageInfo);
       })
       .catch(err => console.log(err));
   }
@@ -39,7 +47,11 @@ function ClientiList() {
       <DataGrid
         getRowId={() => nanoid()}
         rows={rows}
-        columns={columns}
+        columns={columns.filter((item, index) => {
+          if (index <= 7) {
+            return item;
+          }
+        })}
         pageSize={pageInfo?.pageSize}
         rowsPerPageOptions={[10]}
         checkboxSelection

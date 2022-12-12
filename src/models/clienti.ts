@@ -1,6 +1,6 @@
 export interface IClientiPaginate {
   list: IList[];
-  PageInfo: IPageInfo;
+  pageInfo: IPageInfo;
 }
 
 export interface IPageInfo {
