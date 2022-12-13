@@ -33,10 +33,14 @@ function ClientiList() {
   function loadCustomers() {
     getCustomers()
       .then(res => {
-        setRows(res.list);
+        customizeRow(res.list);
         setPageInfo(res.pageInfo);
       })
       .catch(err => console.log(err));
+  }
+
+  function customizeRow(rows: IList[]) {
+    setRows(rows);
   }
 
   return (
@@ -54,9 +58,13 @@ function ClientiList() {
         })}
         pageSize={pageInfo?.pageSize}
         rowsPerPageOptions={[10]}
-        //checkboxSelection
+        checkboxSelection
         disableSelectionOnClick
-        isCellEditable={param => (param ? true : false)}
+        onCellClick={param => {
+          if (param.field === 'SitoWeb') {
+            window.open(param.value);
+          }
+        }}
         experimentalFeatures={{ newEditingApi: true }}
       />
     </div>
