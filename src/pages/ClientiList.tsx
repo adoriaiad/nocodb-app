@@ -54,8 +54,10 @@ function ClientiList() {
         })}
         pageSize={pageInfo?.pageSize}
         rowsPerPageOptions={[10]}
-        checkboxSelection
+        //checkboxSelection
         disableSelectionOnClick
+        isCellEditable={param => (param ? true : false)}
+        experimentalFeatures={{ newEditingApi: true }}
       />
     </div>
   );
