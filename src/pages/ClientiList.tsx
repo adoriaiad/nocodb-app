@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IList, IPageInfo } from '../models/clienti';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getCustomers } from '../services/nocodb.service';
+import { useNocodbApi } from '../services/nocodb.service';
 import { nanoid } from 'nanoid';
 import { isEmptyArray } from 'formik';
 
@@ -15,6 +15,7 @@ function ClientiList() {
     pageSize: 10,
     totalRows: 0,
   });
+  const { getCustomers } = useNocodbApi();
 
   useEffect(() => {
     loadCustomers();
