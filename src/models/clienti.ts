@@ -21,7 +21,7 @@ export interface IList {
   'Referente Cliente': IReferenteCliente;
   'nc_cg5q___nc_m2m_g39ls2g8tu List': INcCg5QNcM2MList;
   Stato: string;
-  Logo: string;
+  Logo: ILogo[] | string;
   'Attività di sales': IAttivitàDiSales;
   SitoWeb: string;
   'nc_cg5q___nc_m2m_gpjflyfu_x List': INcCg5QNcM2MList;
@@ -85,4 +85,11 @@ export interface IReferenteInterno {
 export interface INcCg5QNcM2MList {
   table2_id: number;
   table1_id: number;
+}
+
+export interface ILogo {
+  mimetype: string;
+  size: number;
+  title: string;
+  url: string;
 }
