@@ -5,50 +5,63 @@ import { useNocodbApi } from '../services/nocodb.service';
 import isEmpty from 'lodash.isempty';
 import {
   Avatar,
+  Checkbox,
   Divider,
+  IconButton,
   List,
   ListItem,
   ListItemAvatar,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
   Typography,
 } from '@mui/material';
+import CommentIcon from '@mui/icons-material/Comment';
 
 function ClientiList() {
   const [rows, setRows] = useState<IList[]>([]);
-  const [columns, setColumns] = useState<GridColDef[]>([]);
-  const [pageInfo, setPageInfo] = useState<IPageInfo>({
-    isFirstPage: true,
-    isLastPage: false,
-    page: 1,
-    pageSize: 10,
-    totalRows: 0,
-  });
-  const { getCustomers } = useNocodbApi();
+  const { getCustomers, getWorkForce } = useNocodbApi();
+
+  const [checked, setChecked] = useState<number[]>([]);
+
+  const handleToggle = (value: number) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
 
   useEffect(() => {
     loadCustomers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!isEmpty(rows)) {
-      setColumns(
-        Object.keys(rows[0]).map((key, index) => {
-          return { field: key, headerName: key, width: 110 };
-        })
-      );
-    }
-  }, [rows]);
-
   function loadCustomers() {
     getCustomers()
       .then(res => {
         customizeRow(res.list);
-        console.log('LIST', res.list);
-        setPageInfo(res.pageInfo);
+        //setPageInfo(res.pageInfo);
       })
       .catch(err => console.log(err));
+  }
+
+  function loadIntReferent() {
+    !isEmpty(checked) &&
+      checked.map(rowId => {
+        getWorkForce(rowId)
+          .then(res => console.log('WORKFORCE', res))
+          .catch(err => console.log(err));
+      });
+  }
+
+  function loadWebSite(url: string) {
+    !isEmpty(url) && window.open(url);
   }
 
   function customizeRow(rows: any[]) {
@@ -78,32 +91,90 @@ function ClientiList() {
       >
         {rows.map((row, index) => (
           <React.Fragment key={index}>
-            <ListItem alignItems="flex-start" key={index}>
-              <ListItemButton key={index}>
-                <ListItemAvatar key={index}>
-                  <Avatar alt={''} src={row.Logo as string} />
+            <ListItem alignItems="flex-start" key={`item-${index}`}>
+              <ListItemButton key={`button-${index}`}>
+                <ListItemAvatar key={`item-avatar-${index}`}>
+                  <Avatar
+                    alt={''}
+                    src={row.Logo as string}
+                    key={`avatar-${index}`}
+                    onClick={() => loadWebSite(row.SitoWeb)}
+                  />
                 </ListItemAvatar>
                 <ListItemText
-                  key={index}
-                  primary={''}
+                  key={`item-text-${index}`}
+                  primary={row['Nome Azienda']}
                   secondary={
-                    <React.Fragment key={index}>
+                    <React.Fragment key={`fragm-${index}`}>
                       <Typography
-                        key={index}
+                        key={`tip-${index}`}
                         sx={{ display: 'inline' }}
                         component="span"
                         variant="body2"
                         color="text.primary"
                       >
-                        {row['Nome Azienda']}
+                        <div>{`Stato: ${row.Stato}`}</div>
+                        <div
+                          style={{ fontWeight: 'bold' }}
+                          onClick={() => loadWebSite(row.SitoWeb)}
+                        >
+                          {row.SitoWeb}
+                        </div>
+
+                        <div>Referenti:</div>
+                        <List
+                          sx={{
+                            width: '100%',
+                            maxWidth: 360,
+                            bgcolor: 'background.paper',
+                          }}
+                        >
+                          {row['Referente Interno'].map((ref, i) => (
+                            <ListItem
+                              key={`ref-${i}`}
+                              disablePadding
+                              secondaryAction={
+                                <IconButton
+                                  edge="end"
+                                  aria-label={'message'}
+                                  onClick={() => {
+                                    loadIntReferent();
+                                  }}
+                                >
+                                  <CommentIcon />
+                                </IconButton>
+                              }
+                            >
+                              <ListItemButton
+                                onClick={handleToggle(ref.Id)}
+                                dense
+                              >
+                                <ListItemIcon>
+                                  <Checkbox
+                                    edge="start"
+                                    checked={checked.indexOf(ref.Id) !== -1}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{
+                                      'aria-labelledby': ref.Alias,
+                                    }}
+                                  />
+                                </ListItemIcon>
+                                <ListItemText
+                                  id={`id-${ref.Id}`}
+                                  primary={ref.Alias}
+                                />
+                              </ListItemButton>
+                            </ListItem>
+                          ))}
+                        </List>
                       </Typography>
-                      {row.Memo}
                     </React.Fragment>
                   }
                 />
               </ListItemButton>
             </ListItem>
-            <Divider variant="inset" component="li" key={index} />
+            <Divider variant="inset" component="li" key={`divider-${index}`} />
           </React.Fragment>
         ))}
       </List>

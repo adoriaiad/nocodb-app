@@ -31,5 +31,9 @@ export function useNocodbApi() {
     return (await axiosInstance.get(`${BASE_URL}/Clienti`)).data;
   }
 
-  return { getToken, getCustomers };
+  async function getWorkForce(rowId: number) {
+    return (await axiosInstance.get(`${BASE_URL}/Workforce/${rowId}`)).data;
+  }
+
+  return { getToken, getCustomers, getWorkForce };
 }

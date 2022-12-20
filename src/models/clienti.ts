@@ -17,8 +17,8 @@ export interface IList {
   CreatedAt: string;
   UpdatedAt: string;
   'nc_cg5q__Attività di sales_id': number;
-  'Referente Interno': IReferenteInterno;
-  'Referente Cliente': IReferenteCliente;
+  'Referente Interno': IReferenteInterno[];
+  'Referente Cliente': IReferenteCliente[];
   'nc_cg5q___nc_m2m_g39ls2g8tu List': INcCg5QNcM2MList;
   Stato: string;
   Logo: ILogo[] | string;
