@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { IList, ILogo, IPageInfo } from '../models/clienti';
-import { GridColDef } from '@mui/x-data-grid';
+import { IList, ILogo } from '../models/clienti';
 import { useNocodbApi } from '../services/nocodb.service';
 import isEmpty from 'lodash.isempty';
 import {
   Avatar,
   Checkbox,
   Divider,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -17,25 +17,11 @@ import {
   Typography,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
+import ReferentsGrid from './components/ReferentsGrid';
 
 function ClientiList() {
   const [rows, setRows] = useState<IList[]>([]);
-  const { getCustomers, getWorkForce } = useNocodbApi();
-
-  const [checked, setChecked] = useState<number[]>([]);
-
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
+  const { getCustomers, getWorkForce, getCustomerRef } = useNocodbApi();
 
   useEffect(() => {
     loadCustomers();
@@ -51,11 +37,20 @@ function ClientiList() {
       .catch(err => console.log(err));
   }
 
-  function loadIntReferent() {
+  function loadIntReferent(checked: number[]) {
     !isEmpty(checked) &&
       checked.map(rowId => {
         getWorkForce(rowId)
           .then(res => console.log('WORKFORCE', res))
+          .catch(err => console.log(err));
+      });
+  }
+
+  function loadCustomerReferent(checked: number[]) {
+    !isEmpty(checked) &&
+      checked.map(rowId => {
+        getCustomerRef(rowId)
+          .then(res => console.log('REFERENTI CLIENTE', res))
           .catch(err => console.log(err));
       });
   }
@@ -67,9 +62,6 @@ function ClientiList() {
   function customizeRow(rows: any[]) {
     try {
       const customizedRows = rows.map(row => {
-        const keys = Object.keys(row).map(key => {
-          return key.replace(' ', '');
-        });
         const logo = row.Logo ? (row.Logo as ILogo[])[0].url : '';
         return { ...row, Logo: logo };
       });
@@ -120,54 +112,18 @@ function ClientiList() {
                         >
                           {row.SitoWeb}
                         </div>
-
-                        <div>Referenti:</div>
-                        <List
-                          sx={{
-                            width: '100%',
-                            maxWidth: 360,
-                            bgcolor: 'background.paper',
-                          }}
-                        >
-                          {row['Referente Interno'].map((ref, i) => (
-                            <ListItem
-                              key={`ref-${i}`}
-                              disablePadding
-                              secondaryAction={
-                                <IconButton
-                                  edge="end"
-                                  aria-label={'message'}
-                                  onClick={() => {
-                                    loadIntReferent();
-                                  }}
-                                >
-                                  <CommentIcon />
-                                </IconButton>
-                              }
-                            >
-                              <ListItemButton
-                                onClick={handleToggle(ref.Id)}
-                                dense
-                              >
-                                <ListItemIcon>
-                                  <Checkbox
-                                    edge="start"
-                                    checked={checked.indexOf(ref.Id) !== -1}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{
-                                      'aria-labelledby': ref.Alias,
-                                    }}
-                                  />
-                                </ListItemIcon>
-                                <ListItemText
-                                  id={`id-${ref.Id}`}
-                                  primary={ref.Alias}
-                                />
-                              </ListItemButton>
-                            </ListItem>
-                          ))}
-                        </List>
+                        <Grid container spacing={2}>
+                          <ReferentsGrid
+                            title="Referenti interni"
+                            data={row['Referente Interno']}
+                            loadIntReferent={loadIntReferent}
+                          />
+                          <ReferentsGrid
+                            title="Referenti cliente"
+                            data={row['Referente Cliente']}
+                            loadIntReferent={loadCustomerReferent}
+                          />
+                        </Grid>
                       </Typography>
                     </React.Fragment>
                   }
