@@ -94,37 +94,45 @@ function ClientiList() {
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  key={`item-text-${index}`}
+                  key={`item-text1-${index}`}
                   primary={row['Nome Azienda']}
-                  secondary={
+                />
+                <ListItemText
+                  key={`item-text-${index}`}
+                  primary={
                     <React.Fragment key={`fragm-${index}`}>
                       <Typography
-                        key={`tip-${index}`}
+                        key={`stato-${index}`}
                         sx={{ display: 'inline' }}
-                        component="span"
+                        component="div"
                         variant="body2"
                         color="text.primary"
                       >
-                        <div>{`Stato: ${row.Stato}`}</div>
-                        <div
-                          style={{ fontWeight: 'bold' }}
-                          onClick={() => loadWebSite(row.SitoWeb)}
-                        >
-                          {row.SitoWeb}
-                        </div>
-                        <Grid container spacing={2}>
-                          <ReferentsGrid
-                            title="Referenti interni"
-                            data={row['Referente Interno']}
-                            loadIntReferent={loadIntReferent}
-                          />
-                          <ReferentsGrid
-                            title="Referenti cliente"
-                            data={row['Referente Cliente']}
-                            loadIntReferent={loadCustomerReferent}
-                          />
-                        </Grid>
+                        {`Stato: ${row.Stato}`}
                       </Typography>
+                      <Typography
+                        key={`sito-${index}`}
+                        style={{ fontWeight: 'bold' }}
+                        sx={{ display: 'inline' }}
+                        component="div"
+                        variant="body2"
+                        color="text.primary"
+                        onClick={() => loadWebSite(row.SitoWeb)}
+                      >
+                        {` | Web: ${row.SitoWeb}`}
+                      </Typography>
+                      <Grid container spacing={2}>
+                        <ReferentsGrid
+                          title="Referenti interni"
+                          data={row['Referente Interno']}
+                          loadIntReferent={loadIntReferent}
+                        />
+                        <ReferentsGrid
+                          title="Referenti cliente"
+                          data={row['Referente Cliente']}
+                          loadIntReferent={loadCustomerReferent}
+                        />
+                      </Grid>
                     </React.Fragment>
                   }
                 />

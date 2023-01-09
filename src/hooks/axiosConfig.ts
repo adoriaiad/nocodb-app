@@ -11,7 +11,7 @@ export function useAxiosConfig() {
         baseURL: process.env.REACT_APP_SERVER_URL,
         timeout: 1000,
         headers: {
-          'accept-encoding': '*',
+          'accept-encoding': 'application/json',
           authority:
             process.env.REACT_APP_SERVER_URL || 'https://nocodb.iad2.cloud',
           scheme: 'https',

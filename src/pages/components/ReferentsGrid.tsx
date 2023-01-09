@@ -8,6 +8,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
 import { IReferenteCliente, IReferenteInterno } from '../../models/clienti';
@@ -37,7 +38,7 @@ function ReferentsGrid(props: ReferentsGridProps) {
   };
   return (
     <Grid item xs={12} md={6}>
-      <div>{title}:</div>
+      <Typography>{title}:</Typography>
       <List
         sx={{
           width: '100%',
